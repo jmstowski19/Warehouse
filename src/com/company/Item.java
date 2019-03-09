@@ -2,12 +2,17 @@ package com.company;
 
 
 
-public class Item implements Comparable {
+public class Item implements Comparable<Item> {
 
     private itemCondition cond;
     private double Mass;
     private String Name;
     private int Quantity;
+
+    @Override
+    public int compareTo(Item item) {
+        return 0;
+    }
 
     public String getName() {
         return Name;
@@ -22,13 +27,9 @@ public class Item implements Comparable {
     }
 
     public void addQuantity(Item a){
-        this.Quantity+=a.Quantity;
+        this.Quantity=this.Quantity+a.getQuantity();
     }
 
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
 
     public Item(String a, int b, double c, itemCondition d){
         this.Name=a;
@@ -37,7 +38,12 @@ public class Item implements Comparable {
         this.cond=d;
     }
 
+    public void getOne(){
+        this.Quantity-=1;
+    }
+
     public void print(){
+        System.out.println();
         System.out.print("Name: ");
         System.out.println(Name);
         System.out.print("Quantity: ");

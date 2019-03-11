@@ -4,45 +4,72 @@ package com.company;
 
 public class Item implements Comparable<Item> {
 
+    private int Quantity;
     private itemCondition cond;
     private double Mass;
     private String Name;
-    private int Quantity;
 
-    @Override
-    public int compareTo(Item item) {
-        return 0;
+
+    public itemCondition getCond(){
+        return this.cond;
     }
 
-    public String getName() {
+    public int sum(int b){
+        b=b+this.getQuantity();
+        return b;
+
+    }
+
+    @Override
+    public int compareTo(Item o) {
+        int compare = Name.compareTo(o.Name);
+
+        if(compare == 0) {
+            return compare;
+        }
+        else {
+            throw new IllegalArgumentException("Nic");
+        }
+    }
+
+
+    String getName() {
         return Name;
     }
 
-    public double getMass() {
+    double getMass() {
         return Mass;
     }
 
-    public int getQuantity() {
+    int getQuantity() {
         return Quantity;
     }
 
-    public void addQuantity(Item a){
+    void addQuantity(Item a){
         this.Quantity=this.Quantity+a.getQuantity();
     }
 
+    void addMass(Item a){ this.Mass=this.Mass+a.getMass();}
 
-    public Item(String a, int b, double c, itemCondition d){
+    Item(){
+        this.Name=null;
+        this.Quantity=0;
+        this.Mass=0;
+        this.cond=null;
+    }
+
+    Item(String a, int b, double c, itemCondition d){
         this.Name=a;
         this.Quantity=b;
         this.Mass=c;
         this.cond=d;
     }
 
-    public void getOne(){
+    void getOne(){
         this.Quantity-=1;
     }
 
-    public void print(){
+    void print(){
         System.out.println();
         System.out.print("Name: ");
         System.out.println(Name);

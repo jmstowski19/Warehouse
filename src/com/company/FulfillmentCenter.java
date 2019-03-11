@@ -2,75 +2,142 @@ package com.company;
 
 import java.util.*;
 
-public class FulfillmentCenter{
+class FulfillmentCenter {
 
     private String Name;
     private double maxMass;
     private double currentMass;
-    private Map<String, Item> itemList = new HashMap<>();
+    /*private Map<String, Item> itemList = new HashMap<>();*/
+    private List<Item> items = new ArrayList<>();
 
 
-    public FulfillmentCenter(String a, double b){
-        this.Name=a;
-        this.maxMass=b;
-        this.currentMass=0;
+
+    FulfillmentCenter(String a, double b) {
+        this.Name = a;
+        this.maxMass = b;
+        this.currentMass = 0;
     }
 
-    public void getProduct(Item a){
-        if(itemList.containsKey(a.getName())){
-            if(itemList.get(a.getName()).getQuantity()==0){
-                removeProduct(a);
+    String getName(){
+        return this.Name;
+    }
+
+    double getMaxMass() {
+        return maxMass;
+    }
+
+    double getCurrentMass(){
+        return this.currentMass;
+    }
+
+    void addProduct(Item a){
+        boolean check=false;
+        if (currentMass+a.getMass()<=maxMass){
+            for(Item p : items){
+                if(p.getName()==a.getName()){
+                    check=true;
+                    p.addQuantity(a);
+                    p.addMass(a);
+                    this.currentMass+=a.getMass();
+                }
             }
-            itemList.get(a.getName()).getOne();
-        }
-        else{
-            System.out.println(System.err);
-        }
-    }
+            if(check==false){
+                items.add(a);
+                this.currentMass+=a.getMass();
 
-    public void addProduct(Item a){
-        if(currentMass+a.getMass()<=maxMass){
-            if(itemList.containsKey(a.getName())){
-                itemList.get(a.getName()).addQuantity(a);
-                currentMass = currentMass + a.getMass();
-            }
-            else {
-                itemList.put(a.getName(),a);
-                currentMass = currentMass + a.getMass();
             }
         }
-        else{
-            System.out.println(System.err);
+    }
+
+    void getProduct(Item a){
+        boolean check = false;
+        for (Item p : items){
+            if (p.getName()==a.getName()){
+                check=true;
+                if(p.getQuantity()==1){
+                    removeProduct(p);
+                }
+                else{
+                    p.getOne();
+                    currentMass-=a.getMass();
+                }
+            }
         }
 
     }
 
-    private void removeProduct(Item a){
-        itemList.remove(a.getName());
+    void removeProduct(Item a){
+        currentMass-=a.getMass();
+        items.remove(a);
     }
 
-    public List sortByName(){
-        List<Item> sortedList = new ArrayList<>(itemList.values());
-        Collections.sort(sortedList, Comparator.comparing(Item::getName));
-        return sortedList;
+
+
+    List sortByName() {
+        Collections.sort(items, Comparator.comparing(Item::getName));
+        for (Item p : items) {
+            p.print();
+        }
+        return items;
+
     }
 
-    public List sortByAmount(){
-        List<Item> sortedList = new ArrayList<>(itemList.values());
-        Collections.sort(sortedList, Comparator.comparing(Item::getQuantity));
-        return sortedList;
+    Item search(String a){
+        Item nowy=new Item();
+        for (Item p : items){
+            if (a.compareTo(p.getName())==0){
+                nowy = p;
+            }
+        }
+        return nowy;
     }
 
-    private void summary(){
-        List<Item> ViewList = new ArrayList<>(itemList.values());
-        for (Item p : ViewList) {
+    void SearchPartial(String match){
+        for (Item p : items) {
+            if (p.getName().contains(match)){
+                p.print();
+            }
+
+        }
+    }
+
+    List sortByAmount() {
+
+        Collections.sort(items, Comparator.comparing(Item::getQuantity));
+        for (Item p : items) {
+            p.print();
+        }
+        return items;
+    }
+
+    void summary() {
+        for (Item p : items) {
             p.print();
         }
     }
 
-    private Item max(){
-        List<Item> ViewList = new ArrayList<>(itemList.values());
-        Collections.max(ViewList, null);
+
+    int countByCondition(itemCondition a) {
+
+        final int[] add = {0};
+        items.forEach(Item -> {
+            if (a.equals(Item.getCond())) {
+                add[0] = add[0] + Item.getQuantity();
+                Item.print();
+            }
+        });
+        return add[0];
     }
 
+    Item max(){
+        List<Item> maxList = items;
+        Item maximum;
+        maximum = Collections.max(maxList, Comparator.comparing(Item::getQuantity));
+        maximum.print();
+        return maximum;
+    }
+
+
 }
+
+
